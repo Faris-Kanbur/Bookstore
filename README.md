@@ -17,9 +17,11 @@ EPTC    : - Landing Page
           - Checkout System
                 STORY:
 
-TECH MERN STACK:     -BE node.js server (RESTFUL API)
-                     -Database MONGODB
-                     -View (Client) React
-                     -Payment: Stripe
-                     -Prouction
-                     -Heroku Deploy
+
+
+TECH MERN STACK:     - BE node.js server (RESTFUL API)
+                     - Database MONGODB
+                     - View (Client) React
+                     - Payment: Stripe
+                     - Prouction
+                     - Heroku Deploy
