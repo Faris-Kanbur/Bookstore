@@ -1,6 +1,7 @@
 const User = require("../models/UserModel");
 const bcrypt = require("bcryptjs");
 const {validationResult} = require("express-validator");
+var jwt = require('jsonwebtoken');
 
 exports.authRegister = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
@@ -27,8 +28,9 @@ if (userData) {
 
  
 // PASSWORD
-  const salt = await bcrypt.genSalt(10);
-  const newPassword = await bcrypt.hash(password,salt);
+const salt = await bcrypt.genSalt(10);
+  const newPassword = await bcrypt.hash(password, salt)
+  console.log("newPassword :", newPassword)
  
 
 
@@ -39,7 +41,7 @@ if (userData) {
     firstName,
     lastName,
     email,
-    password, newPassword, //crypted password
+    password : newPassword //crypted password
   });
 
   await user.save();
@@ -48,7 +50,41 @@ if (userData) {
   res.send("Register Completed.");
 };
 
-exports.authLogin = (req, res) => {
+
+
+
+exports.authLogin = async(req, res) => {
+  const { email, password } = req.body;
+
+ 
+  //validator
+  const validationErr = validationResult(req);
+  
+  if (validationErr.errors.length > 0) {
+      return res.status(400).json({ errors: validationErr.array() });
+  }
+
+
+
+  // allready exist user
+const userData = await User.findOne({email});
+if (!userData) {
+  return res.status(400).json({errors : [{ message: "Invalid Email"}] });
+}
+
+
+//Password check
+const isPasswordMatch = await bcrypt.compare(password, userData.password);
+if (!isPasswordMatch) {
+  return res
+  .status(400)
+  .json({ errors : [{ message: "Invalid Password"}] });
+}
+
+
+
+
+
 
   res.send("Login Completed");
 };
