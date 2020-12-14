@@ -82,9 +82,11 @@ if (!isPasswordMatch) {
 }
 
 
+jwt.sign({userData}, process.env.JWT_SECRET_KEY, {expiresIn: "1h"}, (err, token) => {
+  if(err) {
+    return res.status(400).json({ errors: [{ message: "Unkonown Error"}]});
+  }
+  res.send(token);
+});
 
-
-
-
-  res.send("Login Completed");
 };
